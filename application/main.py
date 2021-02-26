@@ -15,13 +15,16 @@ def main():
             score_list = get_scores()
             for score in score_list:
                 prediction = get_prediction(score, loaded_rf)
-                tweet_prediction(score, prediction[0][0] * 100, prediction[0][1] * 100)
-                print("SLEEPING NOW")
-                time.sleep(sleep_time)
+                team_1_prediction = "{:.2f}".format(prediction[0][0] * 100)
+                team_2_prediction = "{:.2f}".format(prediction[0][1] * 100)
+                tweet_prediction(score, team_1_prediction, team_2_prediction)
+
         except Exception as e:
             print(f"SOMETHING FAILED : {e}")
             time.sleep(sleep_time)
             continue
+        print("SLEEPING NOW")
+        time.sleep(sleep_time)
 
 
 if __name__ == '__main__':
