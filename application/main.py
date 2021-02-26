@@ -8,7 +8,7 @@ from utils.twitter import tweet_prediction
 
 
 def main():
-    sleep_time = 300
+    sleep_time = 600
     loaded_rf = joblib.load("./model/t20_model.joblib")
     while (True):
         try:
