@@ -6,52 +6,73 @@ def get_scores() -> []:
     score_list = []
     site = requests.get("https://www.espncricinfo.com/").text
     soup = BeautifulSoup(site)
-    featured_score_card = soup.find("div", {"class": "featured-scoreboard"})
-    scored_card_containers = featured_score_card.find_all("div", {"class", "scorecard-container"})
-    for score_card_container in scored_card_containers:
-        status = score_card_container.find("div", {"class": "status"}).text
-        description = score_card_container.find("div", {"class": "description"}).text
-        if status == "live" and "t20" in description.lower():
-            teams = score_card_container.find_all("div", {"class": "team"})
-            second_team = teams[1]
-            first_team = teams[0]
-            first_team_name = first_team.find("div", {"class", "name-detail"}).text
-            second_team_name = second_team.find("div", {"class", "name-detail"}).text
-            print(f"Match Between {first_team_name} and {second_team_name}")
-            second_team_score_detail = second_team.find("div", {"class", "score-detail"})
-            if second_team_score_detail:
-                print("Second Inning")
-                target = first_team.find("span", {"class", "score"}).text.split("/")[0]
-                runs = int(second_team.find("span", {"class", "score"}).text.split("/")[0])
-                runs_left = int(target) - int(second_team.find("span", {"class", "score"}).text.split("/")[0])
-                wickets = second_team.find("span", {"class", "score"}).text.split("/")[1]
-                over = int(
-                    second_team.find("span", {"class", "score-info"}).text.split("/")[0].split(".")[0].replace("(", ""))
-                try:
-                    balls = int(second_team.find("span", {"class", "score-info"}).text.split("/")[0].split(".")[1])
-                except Exception as e:
-                    print("Exception getting balls : ", e)
-                    balls = 0
-                balls_left = 120 - ((over * 6) + balls)
+    featured_score_card = soup.find("div", {"class": "slick-track"})
+    scored_card_containers = featured_score_card.find_all("div", {"class", "slick-slide"})
+    for sc in scored_card_containers:
+        stuff = sc.find("div", {"class": "ds-flex ds-justify-between ds-items-center"})
+        if stuff:
+            score_card = sc.find("div", {"class": "ds-flex ds-flex-col ds-mb-2 ds-mt-1 ds-space-y-1"})
+            if "t20" in stuff.text.lower() and "live" in stuff.text.lower():
+                return_data ={
+                    "team_1_name" : None,
+                    "team_1_runs": None,
+                    "team_1_overs": None,
+                    "team_1_balls": None,
+                    "team_1_wickets": None,
+                    "team_2_name": None,
+                    "team_2_runs": None,
+                    "team_2_overs": None,
+                    "team_2_balls": None,
+                    "team_2_wickets": None,
 
-                print("Target :", target)
-                print("Runs : ", runs)
-                print("Runs Left : ", runs_left)
-                print("Wickets :", wickets)
-                print("Over: ", over)
-                print("balls: ", balls)
-                print("balls left :", balls_left)
-                score_list.append(
-                    {
-                        "target": target,
-                        "over": over,
-                        "balls": balls,
-                        "wickets": wickets,
-                        "runs": runs,
-                        "balls_left": balls_left,
-                        "runs_left": runs_left,
-                        "first_team": first_team_name,
-                        "second_team": second_team_name
-                    }
-                )
+                }
+                if score_card:
+                    team_scores = score_card.find_all("div", {"class", "ci-team-score"})
+                    team_1_line = team_scores[0]
+                    team_2_line = team_scores[1]
+
+                    team_1_divs = team_1_line.find_all("div")
+                    team_2_divs = team_2_line.find_all("div")
+                    team_1_name = team_1_divs[0].text
+                    team_2_name = team_2_divs[0].text
+                    return_data["team_1_name"] = team_1_name
+                    return_data["team_2_name"] = team_2_name
+                    team_1_score = None
+                    team_2_score = None
+                    if len(team_1_divs) > 1:
+                        team_1_score = team_1_divs[1].text
+                    if len(team_2_divs) > 1:
+                        team_2_score = team_2_divs[1].text
+                    if team_1_score:
+                        print(f"{team_1_name} SCORE")
+                        team_1_overs = 20
+                        team_1_balls = 0
+                        if "(" in team_1_score and ")" in team_1_score:
+                            team_1_over_and_balls = team_1_score.split(" ")[0].replace("(", "").split("/")[0].split(".")
+                            team_1_overs = team_1_over_and_balls[0]
+                            if len(team_1_over_and_balls) > 1:
+                                team_1_balls = team_1_over_and_balls[1]
+                        return_data["team_1_overs"] = team_1_overs
+                        return_data["team_1_balls"] = team_1_balls
+                        team_1_runs = team_1_score.split(" ")[-1].split("/")[0]
+                        team_1_wickets = team_1_score.split(" ")[-1].split("/")[1]
+                        return_data["team_1_runs"] = team_1_runs
+                        return_data["team_1_wickets"] = team_1_wickets
+                    if team_2_score:
+                        if "(" in team_2_score and ")" in team_2_score:
+                            team_2_over_and_balls = team_2_score.split(" ")[0].replace("(", "").split("/")[0].split(".")
+                            team_2_overs = team_2_over_and_balls[0]
+                            if len(team_2_over_and_balls) > 1:
+                                team_2_balls = team_2_over_and_balls[1]
+                            else:
+                                team_2_balls = 0
+                            return_data["team_2_overs"] = team_2_overs
+                            return_data["team_2_balls"] = team_2_balls
+                            team_2_runs = team_2_score.split(" ")[-1].split("/")[0]
+                            team_2_wickets = team_2_score.split(" ")[-1].split("/")[1]
+                            return_data["team_2_runs"] = team_2_runs
+                            return_data["team_2_wickets"] = team_2_wickets
+                score_list.append(return_data)
+
+
     return score_list
