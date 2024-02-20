@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 def get_scores() -> []:
     score_list = []
-    site = requests.get("https://www.espncricinfo.com/").text
+    site = requests.get("https://www.espncricinfo.com/",  headers={'Cache-Control': 'no-cache',"Pragma": "no-cache","Expires": "0"}).text
     soup = BeautifulSoup(site)
     featured_score_card = soup.find("div", {"class": "slick-track"})
     scored_card_containers = featured_score_card.find_all("div", {"class", "slick-slide"})
@@ -55,7 +55,10 @@ def get_scores() -> []:
                         return_data["team_1_overs"] = team_1_overs
                         return_data["team_1_balls"] = team_1_balls
                         team_1_runs = team_1_score.split(" ")[-1].split("/")[0]
-                        team_1_wickets = team_1_score.split(" ")[-1].split("/")[1]
+                        if "/" not in team_1_score:
+                            team_1_wickets = 10
+                        else:
+                            team_1_wickets = team_1_score.split(" ")[-1].split("/")[1]
                         return_data["team_1_runs"] = team_1_runs
                         return_data["team_1_wickets"] = team_1_wickets
                     if team_2_score:
