@@ -12,7 +12,7 @@ def get_scores() -> []:
         stuff = sc.find("div", {"class": "ds-flex ds-justify-between ds-items-center"})
         if stuff:
             score_card = sc.find("div", {"class": "ds-flex ds-flex-col ds-mb-2 ds-mt-1 ds-space-y-1"})
-            if "t20" in stuff.text.lower() and "live" in stuff.text.lower():
+            if "t20" in stuff.text.lower() and "live" in stuff.text.lower() and "psl" in stuff.text.lower():
                 return_data ={
                     "team_1_name" : None,
                     "team_1_runs": None,

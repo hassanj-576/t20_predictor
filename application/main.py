@@ -8,7 +8,7 @@ from utils.twitter import tweet_winner_prediction, tweet_score_prediction
 import traceback
 
 def main():
-    sleep_time = 600
+    sleep_time = 1200
     prediction_model = joblib.load("./model/prediction_model.joblib")
     score_model = joblib.load("./model/run_predictor.joblib")
     while (True):
@@ -41,6 +41,7 @@ def main():
         except Exception as e:
             print(f"SOMETHING FAILED : {e}")
             traceback.print_exc()
+            print("SLEEPING NOW")
             time.sleep(sleep_time)
             continue
         print("SLEEPING NOW")
