@@ -26,11 +26,6 @@ def main():
 
                     team_1_prediction = "{:.2f}".format(prediction[0][0] * 100)
                     team_2_prediction = "{:.2f}".format(prediction[0][1] * 100)
-                    # print("Prediction For Match Winner")
-                    # print(f"Current Score {score.get('team_1_name')} : {score.get('team_1_runs')}/{score.get('team_1_wickets')}")
-                    # print(f"Current Score {score.get('team_2_name')} : {score.get('team_2_runs')}/{score.get('team_2_wickets')}")
-                    # print(f"{score.get('team_1_name')} : {team_1_prediction} %")
-                    # print(f"{score.get('team_2_name')} : {team_2_prediction} %")
                     tweet_winner_prediction(score, team_1_prediction, team_2_prediction)
                 else:
                     # Predicting Score
@@ -40,8 +35,6 @@ def main():
                         "total_runs": int(score.get("team_1_runs"))
                     }
                     prediction = get_run_prediction(data, score_model)
-                    # print(f"Current Score {score.get('team_1_name')} : {score.get('team_1_runs')}/{score.get('team_1_wickets')}")
-                    # print(f"{score.get('team_1_name')} : {prediction} ")
                     tweet_score_prediction(score, prediction)
 
 

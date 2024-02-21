@@ -4,9 +4,12 @@ from config import CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SEC
 
 
 def tweet_winner_prediction(score_dict, team_1_prediction, team_2_prediction):
-    # auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    # auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-    # api = tweepy.API(auth)
+
+    client = tweepy.Client(consumer_key=CONSUMER_KEY,
+                           consumer_secret=CONSUMER_SECRET,
+                           access_token=ACCESS_TOKEN,
+                           access_token_secret=ACCESS_TOKEN_SECRET)
+
     team1 = score_dict.get("team_1_name")
     team2 = score_dict.get("team_2_name")
     target = score_dict.get("team_1_runs")
@@ -21,16 +24,19 @@ Runs Scored by {team2} : {runs} for {wickets}  in {over}.{ball} overs
 Win Prediction : {team1} : {team_1_prediction} %  | {team2} :  {team_2_prediction}%
 Bot by @hj576
 @thePSLt20
-#T20 #PSL9, #{team1}vs{team2} #Prediction #MachineLearning 
+#T20 #PSL9, #{team1}vs{team2} #Prediction #MachineLearning
 
 """
+
     print(tweet_text)
-    # api.update_status(tweet_text)
+    response = client.create_tweet(text=tweet_text)
+    print(response)
 
 def tweet_score_prediction(score_dict, score_prediction):
-    # auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-    # auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-    # api = tweepy.API(auth)
+    client = tweepy.Client(consumer_key=CONSUMER_KEY,
+                           consumer_secret=CONSUMER_SECRET,
+                           access_token=ACCESS_TOKEN,
+                           access_token_secret=ACCESS_TOKEN_SECRET)
     team1 = score_dict.get("team_1_name")
     team2 = score_dict.get("team_2_name")
     team_1_runs = score_dict.get("team_1_runs")
@@ -47,4 +53,5 @@ Bot by @hj576
 
 """
     print(tweet_text)
-    # api.update_status(tweet_text)
+    response = client.create_tweet(text=tweet_text)
+    print(response)
