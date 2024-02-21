@@ -46,7 +46,7 @@ def tweet_score_prediction(score_dict, score_prediction):
 
     tweet_text = f"""T20 Between {team1} and {team2}
 Runs Scored by {team1} : {team_1_runs} for {wickets}  in {over}.{ball} overs
-Total Run Prediction : {team1} : {score_prediction} 
+Total Run Prediction : {team1} : {round(score_prediction)} 
 Bot by @hj576
 @thePSLt20
 #T20 #PSL9, #{team1}vs{team2} #Prediction #MachineLearning 
